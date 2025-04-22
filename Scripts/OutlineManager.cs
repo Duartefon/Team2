@@ -9,8 +9,12 @@ public class OutlineManager : MonoBehaviour
     // Enquanto dás drag a outline fica vermelha, eu queria laranja mas n tem predefenido dps faço se calhar
     void OnMouseDown()
     {
-        isDragging = true;
-        SetOutline(20f, Color.red);
+        if (isHovering)
+        {
+            isDragging = true;
+            SetOutline(20f, Color.red);
+
+        }
     }
 
     // Deixas de dar drag tira o outline vermelho
@@ -36,9 +40,9 @@ public class OutlineManager : MonoBehaviour
     // faz um raycast a partir do centro da tela para ver se o cursor tá em cima do objeto
     void CheckHover()
     {
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width/2, Screen.height/2, 0));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2, 0));
         RaycastHit hit;
-        isHovering = Physics.Raycast(ray, out hit) && hit.collider.gameObject == gameObject;
+        isHovering = Physics.Raycast(ray, out hit, DragSettings.range) && hit.collider.gameObject == gameObject;
     }
 
     void UpdateOutline()
