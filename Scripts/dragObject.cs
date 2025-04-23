@@ -55,21 +55,21 @@ public class dragObject : MonoBehaviour
         //mexe o Z do mouse para o de objeto + a pushforce para o mexer em Z, (Z relativo À visão da camera e não o do world)
         mousePoint.z = mZCoord + pushForce;
 
+        //limita o Z maximo e minimo (push/pull) do objeto em relação à camera.
+        if (mousePoint.z < Options.minDist)
+        {
+            pushForce = 0;
+            mousePoint.z = Options.minDist;
+        }
+        if(mousePoint.z > Options.maxDist)
+        {
+            pushForce = 0;
+            mousePoint.z = Options.maxDist;
+        }
+
         //guarda a informação num Vector3
         cameraToworld = Camera.main.ScreenToWorldPoint(mousePoint);
 
-
-        //limita o Z maximo e minimo (push/pull) do objeto em relação à camera.
-        if (cameraToworld.z < Options.minDist)
-        {
-            pushForce = 0;
-            cameraToworld.z = Options.minDist;
-        }
-        if(cameraToworld.z > Options.maxDist)
-        {
-            pushForce = 0;
-            cameraToworld.z = Options.maxDist;
-        }
         //Guarda a distancia do objeto até À camera
         mOffset = gameObject.transform.position - cameraToworld;
     }
