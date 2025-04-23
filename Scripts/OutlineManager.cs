@@ -5,14 +5,16 @@ public class OutlineManager : MonoBehaviour
     private bool isHovering;
     private bool isDragging;
     private Outline outline;
-
-    // Enquanto dás drag a outline fica vermelha, eu queria laranja mas n tem predefenido dps faço se calhar
+    public float outlineWidth = 10f;
+    public Color outlineColor = Color.yellow;
+    public Color grabColor = new Color(1f, 0.5f, 0f); // cor do outline quando se dá drag
+    // Enquanto dás drag a outline fica laranja
     void OnMouseDown()
     {
         if (isHovering)
         {
             isDragging = true;
-            SetOutline(20f, Color.red);
+            SetOutline(outlineWidth, grabColor);
 
         }
     }
@@ -49,11 +51,11 @@ public class OutlineManager : MonoBehaviour
     {
         if (isDragging)
         {
-            SetOutline(20f, Color.red); // mantém vermelho se drag
+            SetOutline(outlineWidth, grabColor); // mantém vermelho se drag
         }
         else if (isHovering)
         {
-            SetOutline(20f, Color.yellow); // amarelo quando da hover
+            SetOutline(outlineWidth, outlineColor); // amarelo quando da hover
         }
         else
         {

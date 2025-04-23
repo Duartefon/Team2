@@ -85,10 +85,10 @@ class DragController : MonoBehaviour
         if (isDragging && rb != null)
         {
             // isto usa o W e o S mas acho que com o scroll seria melhor
-            float move = Input.GetAxis("Vertical");
-            if (move != 0)
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll != 0)
             {
-                currentDistance += move * DragSettings.pushPullSpeed;
+                currentDistance += scroll * DragSettings.pushPullSpeed;
                 currentDistance = Mathf.Clamp(currentDistance, DragSettings.minDistance, DragSettings.range);
             }
         }
