@@ -1,123 +1,128 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
     private int bodyCount = 0;
-    public bool gameOver;
-    public static int MAX_LEVEL = 3;
-
-
     [SerializeField] private GameObject gameOverInterface;
     [SerializeField] private GameObject redImage;
     [SerializeField] private GameObject time;
     [SerializeField] private GameObject player;
-
-    // BUTTONS
     [SerializeField] private GameObject parkinsonButton;
     [SerializeField] private GameObject redVisionButton;
     [SerializeField] private GameObject placeholder1;
     [SerializeField] private GameObject placeholder2;
     [SerializeField] private GameObject placeholder3;
     [SerializeField] private GameObject placeholder4;
-
-    [SerializeField] private TextMeshProUGUI parkinsonLevelText;
-    [SerializeField] private TextMeshProUGUI redVisionLevelText;
-
     private PlayerScript playerScript;
-    private Dictionary<string, int[]> itemPrices = new Dictionary<string, int[]>();
+    private Dictionary<string, int> items = new();
+    public bool gameOver;
 
     public static GameManager Instance { get; private set; }
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        playerScript = player.GetComponent<PlayerScript>();
+        items.Add("Parkinson", 10);
+        items.Add("Red Vision", 15);
+        items.Add("Placeholder", 20);
+        items.Add("Placeholder1", 25);
+        items.Add("Placeholder2", 30);
+        items.Add("Placeholder3", 40);
+    }
+
+
+    // this should be in the camera script item selector method, but for now keep it here
+    private void Update() {
+        if (playerScript.getMoney() >= items["Parkinson"]) {
+            parkinsonButton.GetComponent<Button>().interactable = true;
+        } else {
+            parkinsonButton.GetComponent<Button>().interactable = false;
+        }
+
+        if (playerScript.getMoney() >= items["Red Vision"]) {
+            parkinsonButton.GetComponent<Button>().interactable = true;
+        } else {
+            parkinsonButton.GetComponent<Button>().interactable = false;
+        }
+    }
 
     private void Awake() {
         if (Instance != null && Instance != this) {
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
     }
 
-    void Start() {
-        playerScript = player.GetComponent<PlayerScript>();
 
-        // adding the different pills with their prices on each level
-        itemPrices.Add("Parkinson", new int[] { 10, 15, 20 });
-        itemPrices.Add("Red Vision", new int[] { 15, 20, 25 });
-        itemPrices.Add("Placeholder", new int[] { 20, 25, 30 });
-        itemPrices.Add("Placeholder1", new int[] { 25, 30, 35 });
-        itemPrices.Add("Placeholder2", new int[] { 30, 35, 40 });
-        itemPrices.Add("Placeholder3", new int[] { 40, 45, 50 });
-
-        UpdateButtonStates();
-    }
-
-    private void Update() {
-        UpdateButtonStates();
-    }
-
-    private void UpdateButtonStates() {
-        int parkinsonLevel = playerScript.GetPillLevel("Parkinson");
-
-        // if we haven't yet bought the max level pills we can keep upgrading the ones we have, if not then the button (to buy) is no longer interactable
-        if (parkinsonLevel < MAX_LEVEL) {
-            int price = itemPrices["Parkinson"][parkinsonLevel];
-            parkinsonButton.GetComponent<Button>().interactable = playerScript.getMoney() >= price;
-
-            if (parkinsonLevelText != null) {
-                parkinsonLevelText.text = $"Level {parkinsonLevel}/3 - ${price}";
-            }
-        } else {
-            parkinsonButton.GetComponent<Button>().interactable = false;
-            if (parkinsonLevelText != null) {
-                parkinsonLevelText.text = "MAX LEVEL";
-            }
-        }
-
-        int redVisionLevel = playerScript.GetPillLevel("Red Vision");
-        if (redVisionLevel < MAX_LEVEL) {
-            int price = itemPrices["Red Vision"][redVisionLevel];
-            redVisionButton.GetComponent<Button>().interactable = playerScript.getMoney() >= price;
-
-            if (redVisionLevelText != null) {
-                redVisionLevelText.text = $"Level {redVisionLevel}/3 - ${price}";
-            }
-        } else {
-            redVisionButton.GetComponent<Button>().interactable = false;
-            if (redVisionLevelText != null) {
-                redVisionLevelText.text = "MAX LEVEL";
-            }
-        }
-
-    }
-
-    // if the player has sent 3 clones to the trash it's game over
     public void addBodyCounter() {
         bodyCount++;
 
-        if (bodyCount == 3) {
+        if(bodyCount == 3) {
             time.SetActive(false);
             redImage.SetActive(false);
             gameOverInterface.SetActive(true);
             gameOver = true;
+
+
+        // this doesnt belong here, just wanted to know if it worked, should be placed in a script of the "finished" table to the left of our operating table in the OnCollisionEnter method, not on the trash one lol
         } else {
-            playerScript.addMoney(10); // the player gets money when a clone is rightfully done, not thrown into the trash but... testing purposes :)
+            playerScript.addMoney(10);
         }
     }
 
-    // each button on the UI will call this method with its item name
-    public void BuyItem(string itemName) {
-        int currentLevel = playerScript.GetPillLevel(itemName);
-
-        // only works if we haven't yet reached the max level of the pill (the button won't be interactable anyways)
-        if (currentLevel < MAX_LEVEL) {
-            int price = itemPrices[itemName][currentLevel];
-
-            if (playerScript.getMoney() >= price) {
-                playerScript.payPrice(price);
-                playerScript.UpgradePill(itemName);
-                UpdateButtonStates();
-            }
+    public void wantToBuyItem(string itemName) {
+        switch (itemName) {
+            case "Parkinson":
+                if (canBuyItem(itemName)) {
+                    playerScript.payPrice(items[itemName]);
+                    // does the effect of the item
+                }
+                break;
+            case "Red Vision":
+                if (canBuyItem(itemName)) {
+                    playerScript.payPrice(items[itemName]);
+                    // does the effect of the item
+                }
+                break;
+            case "asd":
+                if (canBuyItem(itemName)) {
+                    playerScript.payPrice(items[itemName]);
+                    // does the effect of the item
+                }
+                break;
+            case "sdasdsa":
+                if (canBuyItem(itemName)) {
+                    playerScript.payPrice(items[itemName]);
+                    // does the effect of the item
+                }
+                break;
+            case "rdsfa":
+                if (canBuyItem(itemName)) {
+                    playerScript.payPrice(items[itemName]);
+                    // does the effect of the item
+                }
+                break;
+            case "ddfsadsa":
+                if (canBuyItem(itemName)) {
+                    playerScript.payPrice(items[itemName]);
+                    // does the effect of the item
+                }
+                break;
         }
     }
+
+    private bool canBuyItem(string itemName) {
+        int playerMoney = playerScript.getMoney();
+        int costMoney = items[itemName];
+
+        return playerMoney >= costMoney;
+    }
+
 }

@@ -14,7 +14,6 @@ public class TrashScript : MonoBehaviour
         
     }
 
-    // if a clone or a utensil falls on the trash it's gone, if it's a clone it also adds our body counter that determined how many closes the player has lost
     private void OnCollisionEnter(Collision collision) {
         if(collision.gameObject.CompareTag("Clone") || collision.gameObject.CompareTag("Utensil"))
             Destroy(collision.gameObject, 5f);
