@@ -5,7 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour {
     private int bodyCount = 0;
-    public bool gameOver;
+    public bool isGameOver;
     public static int MAX_LEVEL = 3;
 
 
@@ -17,10 +17,6 @@ public class GameManager : MonoBehaviour {
     // BUTTONS
     [SerializeField] private GameObject parkinsonButton;
     [SerializeField] private GameObject redVisionButton;
-    [SerializeField] private GameObject placeholder1;
-    [SerializeField] private GameObject placeholder2;
-    [SerializeField] private GameObject placeholder3;
-    [SerializeField] private GameObject placeholder4;
 
     [SerializeField] private TextMeshProUGUI parkinsonLevelText;
     [SerializeField] private TextMeshProUGUI redVisionLevelText;
@@ -44,10 +40,6 @@ public class GameManager : MonoBehaviour {
         // adding the different pills with their prices on each level
         itemPrices.Add("Parkinson", new int[] { 10, 15, 20 });
         itemPrices.Add("Red Vision", new int[] { 15, 20, 25 });
-        itemPrices.Add("Placeholder", new int[] { 20, 25, 30 });
-        itemPrices.Add("Placeholder1", new int[] { 25, 30, 35 });
-        itemPrices.Add("Placeholder2", new int[] { 30, 35, 40 });
-        itemPrices.Add("Placeholder3", new int[] { 40, 45, 50 });
 
         UpdateButtonStates();
     }
@@ -96,13 +88,18 @@ public class GameManager : MonoBehaviour {
         bodyCount++;
 
         if (bodyCount == 3) {
-            time.SetActive(false);
-            redImage.SetActive(false);
-            gameOverInterface.SetActive(true);
-            gameOver = true;
+            gameOver();
         } else {
             playerScript.addMoney(10); // the player gets money when a clone is rightfully done, not thrown into the trash but... testing purposes :)
         }
+    }
+
+    public void gameOver() {
+        time.SetActive(false);
+        redImage.SetActive(false);
+        gameOverInterface.SetActive(true);
+        isGameOver = true;
+        SoundManager.Instance.stopAllSounds();
     }
 
     // each button on the UI will call this method with its item name

@@ -11,10 +11,6 @@ public class PlayerScript : MonoBehaviour {
     private void Start() {
         pillLevels.Add("Parkinson", 0);
         pillLevels.Add("Red Vision", 0);
-        pillLevels.Add("Placeholder", 0);
-        pillLevels.Add("Placeholder1", 0);
-        pillLevels.Add("Placeholder2", 0);
-        pillLevels.Add("Placeholder3", 0);
     }
 
     // we try to get the level of the pill in question

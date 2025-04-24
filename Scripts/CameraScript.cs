@@ -16,7 +16,7 @@ public class CameraScript : MonoBehaviour {
 
     private void FixedUpdate() {
         // while the game is running and the computer interface isn't on, the camera may rotate
-        if (GameManager.Instance.gameOver == false && computerInterface.activeSelf == false) {
+        if (GameManager.Instance.isGameOver == false && computerInterface.activeSelf == false) {
             float screenWidth = Screen.width;
             float mouseX = Input.mousePosition.x;
             if (mouseX < screenWidth / 3) {
@@ -26,7 +26,7 @@ public class CameraScript : MonoBehaviour {
             } else {
                 gameObject.transform.rotation = Quaternion.Euler(28f, 305f, 0);
             }
-        } else if (GameManager.Instance.gameOver) {
+        } else if (GameManager.Instance.isGameOver) {
             // if game over then we stop all coroutines
             StopAllCoroutines();
         }

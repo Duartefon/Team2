@@ -29,10 +29,12 @@ public class TimeScript : MonoBehaviour {
     void Update() {
 
         // only applies effects if the game is still running
-        if (!GameManager.Instance.gameOver) {
+        if (!GameManager.Instance.isGameOver) {
             timeText.text = Time.time.ToString("F2"); // to appear at most 2 decimal numbers
 
-            if (Time.time > 15f) {
+            if (Time.time > 20f) {
+                GameManager.Instance.gameOver();
+            } else if (Time.time > 15f) {
                 camera.GetComponent<CameraScript>().Shake(2);
                 if (!hasFaded) {
                     StartCoroutine(FadeRedImage());
