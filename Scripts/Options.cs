@@ -13,4 +13,6 @@ public static class Options
     [SerializeField] public static float minDist = 1f;
 
     [SerializeField] public static float hp = 2;
+
+    [SerializeField] public static float rotationSpeed = 70f;
 }
