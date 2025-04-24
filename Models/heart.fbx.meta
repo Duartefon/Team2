@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f4590819254d91948ad4549f9fbf942f
+guid: dfce7cb02467c3a499b6ea1f0b494c1c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,28 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Skin
-    second: {fileID: 2100000, guid: a13c74dd5d063aa4084ecdcdb763ab96, type: 2}
+      name: Art
+    second: {fileID: 2100000, guid: 172d2dcd6e424294dafa9bcf149a38cd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Heart
+    second: {fileID: 2100000, guid: 829c054db80496a458ff6a57c9e6882b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 3731a3337b4f2664f98622242e0dd12b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 96867a35aec9bc04a9085b0f06c76509, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Vein
+    second: {fileID: 2100000, guid: 4ca6ac1c8eca288438347599c8cbfe58, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -35,7 +55,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1

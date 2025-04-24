@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f4590819254d91948ad4549f9fbf942f
+guid: 3e6d5e3b543e5f1479514795e5cc76c7
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,8 +7,8 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: Skin
-    second: {fileID: 2100000, guid: a13c74dd5d063aa4084ecdcdb763ab96, type: 2}
+      name: Liver
+    second: {fileID: 2100000, guid: 457ef20f8501e8e49885982f6d891e50, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -35,7 +35,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 0
+    isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
