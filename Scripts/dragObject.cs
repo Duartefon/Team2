@@ -12,14 +12,14 @@ public class dragObject : MonoBehaviour
     private float pushForce = 0;
     private Rigidbody rb;
     private Vector3 cameraToworld;
-    public Material outlineMaterial;
+    private float rotationSpeed = Options.rotationSpeed;
+    private float rotationDirection = 0f;
+    private float rotationAxis = 0f;
 
     //Quando se carrega no mouse, desativa-se a gravidade do rigidBody
     void OnMouseDown()
     {
         rb.useGravity = false;
-        outlineMaterial.SetColor("Color", Color.yellow);
-        this.gameObject.GetComponent<Renderer>().materials[0] = outlineMaterial;
     }
 
     //Quando se levanta o mouse ativase-se a gravidade do rigidBody
@@ -38,42 +38,58 @@ public class dragObject : MonoBehaviour
         //se tiver gravidade mete a pushForce a 0 e sai do update
         if (rb.useGravity) {
             pushForce = 0;
+            rotationDirection = 0f;
             return; 
         }
         else
         {
-            //afeta a velocidade do rigidBody forï¿½ando-o a ir na direï¿½ï¿½o do mouse
-            rb.linearVelocity = -mOffset * Options.dragSpeed;
+            //afeta a velocidade do rigidBody forçando-o a ir na direção do mouse
+            rb.velocity = -mOffset * Options.dragSpeed;
         }
-        //Forï¿½a usada para saber se o objeto estï¿½ neutro, a ser pull ou pushed (W e S).
-        //Options tem os parametros para se for necessaro alterar ï¿½ alterado para todos.
+        //Força usada para saber se o objeto está neutro, a ser pull ou pushed (W e S).
+        //Options tem os parametros para se for necessaro alterar é alterado para todos.
         pushForce = Input.GetAxis("Vertical") * Options.dragSpeed * Options.moveSpeedPercentage;
 
-        //vai buscar a posiï¿½ï¿½o do mouse
+        //vai buscar a posição do mouse
         Vector3 mousePoint = Input.mousePosition;
         
         //coloca o Z da camera igual ao Z do objeto.
         mZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
 
-        //mexe o Z do mouse para o de objeto + a pushforce para o mexer em Z, (Z relativo ï¿½ visï¿½o da camera e nï¿½o o do world)
+        //mexe o Z do mouse para o de objeto + a pushforce para o mexer em Z, (Z relativo À visão da camera e não o do world)
         mousePoint.z = mZCoord + pushForce;
 
-        //guarda a informaï¿½ï¿½o num Vector3
+        //limita o Z maximo e minimo (push/pull) do objeto em relação à camera.
+        if (mousePoint.z < Options.minDist)
+        {
+            pushForce = 0;
+            mousePoint.z = Options.minDist;
+        }
+        if(mousePoint.z > Options.maxDist)
+        {
+            pushForce = 0;
+            mousePoint.z = Options.maxDist;
+        }
+
+        //guarda a informação num Vector3
         cameraToworld = Camera.main.ScreenToWorldPoint(mousePoint);
 
+        // verifica o input do utilizador
+        if (Input.GetKeyDown("e")){ rotationDirection = -1f;}
+        if (Input.GetKeyUp("e")){ rotationDirection = 0f; }
+        if (Input.GetKeyDown("q")){ rotationDirection = 1f; }
+        if (Input.GetKeyUp("q")){ rotationDirection = 0f; }
+        if (Input.GetKeyDown("r")) { 
+            rotationAxis += 1;
+            rotationAxis = rotationAxis % 3;
+        }
+        //aplica a rotação ao objeto
+        if(rotationAxis == 0){ transform.Rotate(Vector3.up, rotationSpeed * rotationDirection * Time.deltaTime, Space.World); }
+        if(rotationAxis == 1){ transform.Rotate(Vector3.forward, rotationSpeed * rotationDirection * Time.deltaTime, Space.World); }
+        if(rotationAxis == 2) { transform.Rotate(Vector3.right, rotationSpeed * rotationDirection * Time.deltaTime, Space.World); }
+        //transform.Rotate(Vector3.up, rotationSpeed * rotationDirection * Time.deltaTime, Space.World);
 
-        //limita o Z maximo e minimo (push/pull) do objeto em relaï¿½ï¿½o ï¿½ camera.
-        if (cameraToworld.z < Options.minDist)
-        {
-            pushForce = 0;
-            cameraToworld.z = Options.minDist;
-        }
-        if(cameraToworld.z > Options.maxDist)
-        {
-            pushForce = 0;
-            cameraToworld.z = Options.maxDist;
-        }
-        //Guarda a distancia do objeto atï¿½ ï¿½ camera
+        //Guarda a distancia do objeto até À camera
         mOffset = gameObject.transform.position - cameraToworld;
     }
 }
