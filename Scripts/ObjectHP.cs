@@ -1,19 +1,19 @@
-using System.Collections;
 using UnityEngine;
 
 public class ObjectHP : MonoBehaviour
 {
-    [SerializeField] GameObject halfHPObject;
+    [SerializeField] private GameObject halfHPObject;
+    [SerializeField] private System.String tagForSaveCorrectSpot;
 
     private float hp = Options.hp;
     private Vector3 startPosition;
-    private ParticleSystem ps;
+    private BodyManager bodyManager;
+    private bool isPlaced = false;
 
-    //Guarda a possição
     private void Start()
     {
         startPosition = transform.position;
-        ps = GetComponent<ParticleSystem>();
+        bodyManager = FindObjectOfType<BodyManager>();
     }
 
     public void SetHP(float hpValue)
@@ -21,38 +21,47 @@ public class ObjectHP : MonoBehaviour
         hp = hpValue;
     }
 
+    public void SetAsPlaced()
+    {
+        isPlaced = true;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("unsafe"))
         {
             hp--;
-            if(hp == 1)
+
+            if (hp == 1)
             {
                 Debug.Log("You better watch out!");
-
                 GameObject newObj = Instantiate(halfHPObject, startPosition, Quaternion.identity);
                 ObjectHP newHP = newObj.GetComponent<ObjectHP>();
                 newHP.halfHPObject = new GameObject();
                 newHP.SetHP(hp);
-            }else
-            {
-                Debug.Log("You Fucked Up!");
+                newHP.bodyManager = bodyManager;
             }
-            ps.Play();
-            ps.transform.parent = null;
-            StartCoroutine(DieWithParticles());
-            //Destroy(gameObject);
+            else
+            {
+                //Debug.Log("You Fucked Up!");
+                if (isPlaced && bodyManager != null)
+                {
+                    bodyManager.OnOrganPlaced(true); // broken organ placed
+                }
+            }
+
+            Destroy(gameObject);
         }
-    }
-    IEnumerator DieWithParticles()
-    {
-        if (ps.isPlaying)
+        //add colision for the safe tag. aand pass bodyManager(false)
+        if (collision.gameObject.CompareTag(tagForSaveCorrectSpot))
         {
-            Debug.Log("Waiting");
-            yield return null;
+            bodyManager.OnOrganPlaced(false);
         }
-        Debug.Log("Done!");
-        Destroy(ps.gameObject, ps.main.duration);
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("safe"))
+        {
+            Debug.Log("its safe");
+        }
+
+
     }
 }

@@ -44,11 +44,11 @@ class DragController : MonoBehaviour
             Vector3 desiredVelocity = (targetPos - rb.position) * DragSettings.dragSpeed;
 
             //aplica a velocidade com o lerp para ser mais smooth
-            rb.linearVelocity = Vector3.Lerp(
+            /*rb.linearVelocity = Vector3.Lerp(
                 rb.linearVelocity,
                 desiredVelocity,
                 DragSettings.damping * Time.fixedDeltaTime
-            );
+            );*/
         }
     }
 

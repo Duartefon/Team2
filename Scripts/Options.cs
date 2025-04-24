@@ -9,8 +9,8 @@ public static class Options
     [SerializeField] public static float dragSpeed = 8f;
     [SerializeField] public static float moveSpeedPercentage = 0.015f;
 
-    [SerializeField] public static float maxDist = 3.5f;
-    [SerializeField] public static float minDist = 1f;
+    [SerializeField] public static float maxDist = 5.5f;
+    [SerializeField] public static float minDist = 1.5f;
 
     [SerializeField] public static float hp = 2;
 

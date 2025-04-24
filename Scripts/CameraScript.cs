@@ -6,6 +6,7 @@ public class CameraScript : MonoBehaviour {
     private Coroutine currentShake;
     private GameObject player;
     private PlayerScript playerScript;
+    private bool isUsingComputer = false;
 
     private float[] baseShakeMagnitudes = { 1f, 1.1f, 1.2f };
 
@@ -17,15 +18,24 @@ public class CameraScript : MonoBehaviour {
     private void FixedUpdate() {
         // while the game is running and the computer interface isn't on, the camera may rotate
         if (GameManager.Instance.isGameOver == false && computerInterface.activeSelf == false) {
-            float screenWidth = Screen.width;
-            float mouseX = Input.mousePosition.x;
-            if (mouseX < screenWidth / 3) {
-                gameObject.transform.rotation = Quaternion.Euler(28f, 235f, 0f);
-            } else if (mouseX >= screenWidth / 3 && mouseX <= screenWidth * 2 / 3) {
-                gameObject.transform.rotation = Quaternion.Euler(28f, 270f, 0);
-            } else {
-                gameObject.transform.rotation = Quaternion.Euler(28f, 305f, 0);
+                
+
+        if (!isUsingComputer && Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit)) {
+                if (hit.collider.CompareTag("PC")) {
+                    computerInterface.SetActive(true);
+                    isUsingComputer = true;
+                }
             }
+        }
+
+        if (isUsingComputer && Input.GetKeyDown(KeyCode.Escape))
+{
+    computerInterface.SetActive(false);
+    isUsingComputer = false;
+}
         } else if (GameManager.Instance.isGameOver) {
             // if game over then we stop all coroutines
             StopAllCoroutines();
@@ -65,5 +75,10 @@ public class CameraScript : MonoBehaviour {
             transform.position = originalPos + new Vector3(0, y, z);
             yield return new WaitForSeconds(0.3f);
         }
+    }
+
+    public void turnOffComputerInterface()
+    {
+        computerInterface.SetActive(false);
     }
 }

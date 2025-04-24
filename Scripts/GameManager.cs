@@ -8,6 +8,15 @@ public class GameManager : MonoBehaviour {
     public bool isGameOver;
     public static int MAX_LEVEL = 3;
 
+    //for game loop
+
+    [SerializeField] private GameObject bodyPrefab;
+
+    private bool isWaitingForNextBody = false;
+    private int bodyFailCount = 0;
+    private int currentMoney = 0;
+
+    //-------
 
     [SerializeField] private GameObject gameOverInterface;
     [SerializeField] private GameObject redImage;
@@ -46,6 +55,40 @@ public class GameManager : MonoBehaviour {
 
     private void Update() {
         UpdateButtonStates();
+    }
+
+    //for game loop
+    public void SpawnNextBody()
+    {
+        //Instantiate(bodyPrefab, bodySpawnPoint.position, Quaternion.identity);
+        isWaitingForNextBody = false;
+    }
+
+    public void NextBodyReady()
+    {
+        isWaitingForNextBody = true;
+        //nextBodyButton.SetActive(true);
+    }
+    //chamar a função no botão
+    public void OnNextBodyButtonPressed()
+    {
+        if (!isWaitingForNextBody) return;
+        //nextBodyButton.SetActive(false);
+        SpawnNextBody();
+    }
+    //chamada no game loop
+    public void FailBody()
+    {
+        bodyFailCount++;
+        Debug.Log("Bodies Failed: " + bodyFailCount);
+    }
+    public void gameOver()
+    {
+        time.SetActive(false);
+        redImage.SetActive(false);
+        gameOverInterface.SetActive(true);
+        isGameOver = true;
+        SoundManager.Instance.stopAllSounds();
     }
 
     private void UpdateButtonStates() {
@@ -87,19 +130,10 @@ public class GameManager : MonoBehaviour {
     public void addBodyCounter() {
         bodyCount++;
 
-        if (bodyCount == 3) {
+        if (bodyCount == 3)
+        {
             gameOver();
-        } else {
-            playerScript.addMoney(10); // the player gets money when a clone is rightfully done, not thrown into the trash but... testing purposes :)
         }
-    }
-
-    public void gameOver() {
-        time.SetActive(false);
-        redImage.SetActive(false);
-        gameOverInterface.SetActive(true);
-        isGameOver = true;
-        SoundManager.Instance.stopAllSounds();
     }
 
     // each button on the UI will call this method with its item name
